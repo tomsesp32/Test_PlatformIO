@@ -1,44 +1,29 @@
 #include <Arduino.h>
 
-static constexpr uint8_t LED_PIN = 10;          // matches your YAML: pin: 10
-static constexpr uint32_t PERIOD_MS = 500;     // matches your YAML: interval: 2.5s
-
-// Some ESP32-C3 boards wire the LED "active-low" (LED turns on when pin is LOW).
-// If yours is active-low, set this to true.
-static constexpr bool ACTIVE_LOW = false;
-
-static bool ledState = false;                  // logical "ON/OFF" state
-static uint32_t lastToggleMs = 0;
-
-static void writeLed(bool on) {
-  if (ACTIVE_LOW) {
-    digitalWrite(LED_PIN, on ? LOW : HIGH);
-  } else {
-    digitalWrite(LED_PIN, on ? HIGH : LOW);
-  }
-}
+static constexpr uint8_t BLINK_PIN = 10;
+static constexpr uint32_t ON_TIME_MS = 1000;
+static constexpr uint32_t OFF_TIME_MS = 1000;
+static constexpr uint32_t WAIT_BETWEEN_CYCLES_MS = 3000;
+static constexpr uint8_t BLINK_COUNT = 3;
 
 void setup() {
-
-  pinMode(LED_PIN, OUTPUT);
-
-  // Start in OFF state (same idea as ESPHome "switch" default unless you set restore_mode).
-  ledState = false;
-  writeLed(ledState);
-
-  // Optional: serial for debugging
   Serial.begin(115200);
-  delay(500);
-  Serial.println("Boot OK: serial smoke test");
+  pinMode(BLINK_PIN, OUTPUT);
+  digitalWrite(BLINK_PIN, LOW);
+  Serial.println("ESP32 blink sequence started");
 }
 
 void loop() {
-  const uint32_t now = millis();
-  if (now - lastToggleMs >= PERIOD_MS) {
-    lastToggleMs = now;
-    ledState = !ledState;   // toggle (switch.toggle)
-    writeLed(ledState);
+  for (uint8_t i = 0; i < BLINK_COUNT; ++i) {
+    Serial.printf("Blink %u ON\n", i + 1);
+    digitalWrite(BLINK_PIN, HIGH);
+    delay(ON_TIME_MS);
 
-    Serial.printf("Toggled: %s\n", ledState ? "ON" : "OFF");
+    Serial.printf("Blink %u OFF\n", i + 1);
+    digitalWrite(BLINK_PIN, LOW);
+    delay(OFF_TIME_MS);
   }
-}// PR test
+
+  Serial.println("Waiting 3 seconds before repeating...");
+  delay(WAIT_BETWEEN_CYCLES_MS);
+}
