@@ -19,6 +19,7 @@ static void writeLed(bool on) {
 }
 
 void setup() {
+
   pinMode(LED_PIN, OUTPUT);
 
   // Start in OFF state (same idea as ESPHome "switch" default unless you set restore_mode).
@@ -27,8 +28,8 @@ void setup() {
 
   // Optional: serial for debugging
   Serial.begin(115200);
-  delay(100);
-  Serial.println("GPIO10 blinker started");
+  delay(500);
+  Serial.println("Boot OK: serial smoke test");
 }
 
 void loop() {
