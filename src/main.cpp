@@ -27,8 +27,8 @@ void setup() {
 
   // Optional: serial for debugging
   Serial.begin(115200);
-  delay(100);
-  Serial.println("GPIO10 blinker started");
+  delay(500);
+  Serial.println("Boot OK: serial smoke test");
 }
 
 void loop() {
