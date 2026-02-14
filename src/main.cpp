@@ -7,10 +7,10 @@ static constexpr uint32_t WAIT_BETWEEN_CYCLES_MS = 3000;
 static constexpr uint8_t BLINK_COUNT = 3;
 
 void setup() {
-  Serial.begin(115200);
   pinMode(BLINK_PIN, OUTPUT);
-  digitalWrite(BLINK_PIN, LOW);
-  Serial.println("ESP32 blink sequence started");
+  Serial.begin(115200);
+  delay(2000);
+  Serial.println("=== BOOT ===");
 }
 
 void loop() {
@@ -23,7 +23,8 @@ void loop() {
     digitalWrite(BLINK_PIN, LOW);
     delay(OFF_TIME_MS);
   }
-
+  Serial.println("Loop start");
+  Serial.flush();
   Serial.println("Waiting 3 seconds before repeating...");
   delay(WAIT_BETWEEN_CYCLES_MS);
 }
